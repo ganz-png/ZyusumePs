@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZysumePS - GTPS</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:linear-gradient(180deg,#071026 0%, #071827 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{width:100%;max-width:860px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px)}
+    header{display:flex;gap:18px;align-items:center}
+    .logo{width:64px;height:64px;background:linear-gradient(135deg,var(--accent),#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
+    h1{margin:0;font-size:22px}
+    p.lead{color:var(--muted);margin-top:6px;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;cursor:pointer;text-align:left}
+    .btn h3{margin:0;font-size:15px}
+    .btn p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:8px;margin-top:10px}
+    .small{font-size:12px;color:var(--muted)}
+    .copy-ok{display:inline-block;margin-left:8px;color:limegreen;font-weight:600}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .top-right{margin-left:auto;text-align:right}
+    .badge{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:8px;font-weight:600}
+    .codebox{background:#031022;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);font-family:monospace;font-size:13px;color:#cfe9ff;overflow:auto}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <header>
+      <div class="logo">GTPS</div>
+      <div>
+        <h1>ZysumePS — GTPS</h1>
+        <p class="lead">SELAMAT DATANG DI GTPS</p>
+      </div>
+      <div class="top-right">
+        <div class="badge">v1.1 • Custom</div>
+      </div>
+    </header>
+
+    <section style="margin-top:18px">
+      <div class="grid">
+        <button class="btn" id="copyPowertunel">
+          <h3>Copy PowerTunnel</h3>
+          <p>Klik untuk menyalin URL PowerTunnel ke clipboard (otomatis menyalin: https://growsoft.cc/android/9524)</p>
+          <div class="actions"><span class="small">Klik saja — akan muncul tanda "tersalin"</span><span id="powStatus" class="copy-ok" style="display:none">Tersalin!</span></div>
+        </button>
+
+        <div class="btn" id="showVhost">
+          <h3>VHost</h3>
+          <p>Tampilkan VHost (dapat disalin manual atau dengan tombol copy)</p>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <div style="flex:1" class="codebox" id="vhostText">https://www.mediafire.com/file/2th2vrezm660iua/Vhost.txt/file</div>
+            <button class="btn" id="copyVhost" style="width:120px;text-align:center">Copy VHost</button>
+          </div>
+          <div id="vhostStatus" class="copy-ok" style="display:none">Tersalin!</div>
+        </div>
+
+        <div class="btn" id="windowsSection">
+          <h3>Windows</h3>
+          <p>File/skrip Windows — salin konfigurasi .bat atau unduh</p>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <div style="flex:1" class="codebox" id="winText">91.134.85.13 growtopia1.com\n91.134.85.13 growtopia2.com\n91.134.85.13 www.growtopia1.com\n91.134.85.13 www.growtopia2.com</div>
+            <button class="btn" id="copyWin" style="width:120px;text-align:center">Copy</button>
+          </div>
+          <div style="margin-top:8px"><a id="downloadWin" class="small" href="#">Unduh .bat</a></div>
+          <div id="winStatus" class="copy-ok" style="display:none">Tersalin!</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>HALO</div>
+      <div style="margin-top:8px">selamat datang</div>
+    </footer>
+  </div>
+
+  <script>
+    const powUrl = 'https://growsoft.cc/android/9524';
+    const vhostDefault = 'https://www.mediafire.com/file/2th2vrezm660iua/Vhost.txt/file';
+    const winBat = `91.134.85.13 growtopia1.com\r\n91.134.85.13 growtopia2.com\r\n91.134.85.13 www.growtopia1.com\r\n91.134.85.13 www.growtopia2.com`;
+
+    document.getElementById('vhostText').innerText = vhostDefault;
+    document.getElementById('winText').innerText = winBat;
+
+    async function copyToClipboard(text, statusEl) {
+      try {
+        await navigator.clipboard.writeText(text);
+        statusEl.style.display = 'inline-block';
+        setTimeout(()=> statusEl.style.display='none',1600);
+      } catch (e) {
+        alert('Gagal menyalin. Silakan salin manual: ' + text);
+      }
+    }
+
+    document.getElementById('copyPowertunel').addEventListener('click', ()=>{
+      copyToClipboard(powUrl, document.getElementById('powStatus'));
+    });
+
+    document.getElementById('copyVhost').addEventListener('click', ()=>{
+      copyToClipboard(document.getElementById('vhostText').innerText, document.getElementById('vhostStatus'));
+    });
+
+    document.getElementById('copyWin').addEventListener('click', ()=>{
+      copyToClipboard(document.getElementById('winText').innerText, document.getElementById('winStatus'));
+    });
+
+    document.getElementById('downloadWin').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const blob = new Blob([winBat], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'zysumeps';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
